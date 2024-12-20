@@ -38,6 +38,10 @@ class BaseDatos:
         except Exception as e:  # Capturar el error específico
             print(f"No se pudo ingresar los datos: {e}")
 
+    def consultas(self, sql_query):
+        self.cursor.execute(sql_query)
+        return self.cursor
+
     def login(self, email, password):
         try:
              # Construir la consulta SQL de forma segura
@@ -48,10 +52,32 @@ class BaseDatos:
             password_hashed = hashed[0]
 
             if bcrypt.checkpw(password, password_hashed.encode(encoding='utf-8')):
+               
                print("Pasword is correct!")
+               return True
             else:
                print ("Password is incorrect!")
+               return False
             
         except Exception as e:  # Capturar el error específico
             print(f"Algo fallo al iniciar sesión:  {e}")
+
+    def add_product(self, **kwargs):
+
+
+        try:
+            # Generar dinámicamente las columnas y los placeholders
+            columns = ', '.join(kwargs.keys())  # Columnas (nombres)
+            placeholders = ', '.join(['%s'] * len(kwargs))  # Placeholders para los valores
+            values = tuple(kwargs.values()) # Valores reales como tupla
+            # Construir la consulta SQL de forma segura
+            sql_query = f"INSERT INTO products ({columns}) VALUES ({placeholders})"
+            # Ejecutar la consulta con valores seguros
+            self.cursor.execute(sql_query, values)
+            self.conector.commit()
+
+            print("Datos insertados correctamente.")
+            
+        except Exception as e:  # Capturar el error específico
+            print(f"No se pudo ingresar los datos: {e}")
 
