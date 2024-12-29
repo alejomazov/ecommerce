@@ -30,7 +30,9 @@ password = input ('ingrese un password:').encode(encoding='utf-8')
 
 db.login(email, password)
 '''
-
+@app.route('/')
+def index():
+    return redirect(url_for('home'))
 @app.route('/index.html')
 def home():
     return render_template('index.html')
@@ -68,6 +70,13 @@ def login():
     else:    
         return render_template('login.html')
     
+def prueba():
+    pass
+    
+
+@app.route('/prueba')
+def prueba():
+    return render_template('prueba.html')  
 
             
 if __name__ == "__main__":
